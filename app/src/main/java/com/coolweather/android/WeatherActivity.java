@@ -99,11 +99,14 @@ public class WeatherActivity extends AppCompatActivity {
             //有缓存时直接解析天气数据
             Weather weather = Utility.handleWeatherResponse(weatherString);
             mWeatherId = weather.basic.weatherId;
+            Log.d("WeatherID", "weatherID in you huangc " + mWeatherId);
+            getIntent().putExtra("weather_id", mWeatherId);
             showWeatherInfo(weather);
         } else {
             //无缓存时去服务器查询天气
             mWeatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE); //将scorllView隐藏
+            Log.d("WeatherID", "weatherID in wu huangc " + mWeatherId);
             requestWeather(mWeatherId);
         }
         String bingPic = prefs.getString("bing_pic", null);
@@ -116,6 +119,7 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mWeatherId = getIntent().getStringExtra("weather_id");
                 requestWeather(mWeatherId);
             }
         });
@@ -160,6 +164,8 @@ public class WeatherActivity extends AppCompatActivity {
      * @param weatherId
      */
     public void requestWeather(final  String weatherId){
+        getIntent().putExtra("weather_id", weatherId);
+        Log.d("WeatherID", "weatherID in requestWeather " + weatherId + " getStringExtra is " + getIntent().getStringExtra("weather_id"));
         String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId
                 + "&key=522b721e4b0f41f9aefa99fc6e5b0e07";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
@@ -170,7 +176,6 @@ public class WeatherActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("requestWeather", "weather status:" + weather.status);
                         if (weather != null && "ok".equals(weather.status)) {
                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather", responseText);
@@ -219,10 +224,6 @@ public class WeatherActivity extends AppCompatActivity {
             TextView infoText = (TextView) view.findViewById(R.id.info_text);
             TextView maxText = (TextView) view.findViewById(R.id.max_text);
             TextView minText = (TextView) view.findViewById(R.id.min_text);
-            Log.d("showWeatherInfo", "data: " + forecast.date);
-            Log.d("showWeatherInfo", "info: " + forecast.more.info);
-            Log.d("showWeatherInfo", "max: " + forecast.temperature.max);
-            Log.d("showWeatherInfo", "min: " + forecast.temperature.min);
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
             maxText.setText(forecast.temperature.max);
