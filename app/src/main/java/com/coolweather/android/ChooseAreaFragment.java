@@ -2,10 +2,14 @@ package com.coolweather.android;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +25,11 @@ import com.coolweather.android.db.City;
 import com.coolweather.android.db.County;
 import com.coolweather.android.db.Province;
 import com.coolweather.android.util.HttpUtil;
+import com.coolweather.android.util.LBS;
 import com.coolweather.android.util.Utility;
 
 import org.litepal.crud.DataSupport;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,7 +44,7 @@ import okhttp3.Response;
  * 遍历城市的碎片
  */
 
-public class ChooseAreaFragment extends Fragment {
+public class ChooseAreaFragment extends Fragment{
     public static final int LEVEL_PROVINCE = 0;
     public static final int LEVEL_CITY = 1;
     public static final int LEVEL_COUNTY = 2;
@@ -90,6 +96,7 @@ public class ChooseAreaFragment extends Fragment {
         listView.setAdapter(adapter);
         return view;
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

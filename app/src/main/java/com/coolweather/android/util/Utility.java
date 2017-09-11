@@ -1,16 +1,21 @@
 package com.coolweather.android.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.coolweather.android.db.City;
 import com.coolweather.android.db.County;
 import com.coolweather.android.db.Province;
 import com.coolweather.android.gson.Weather;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/8/31.
@@ -18,6 +23,38 @@ import org.json.JSONObject;
  */
 
 public class Utility {
+    /**
+     * 获得定位城市信息
+     * @param response
+     * @return
+     */
+    public static String  handleWeatherIDResponse(String response){
+        if (!TextUtils.isEmpty(response)){
+            try{
+                JSONObject object = new JSONObject(response);
+                Log.d("JSON", "handleWeatherIDResponse:1 "+ object);//有HeWeather5
+                JSONArray object2 = object.getJSONArray("HeWeather5");
+                Log.d("JSON", "handleWeatherIDResponse:2 " + object2);//是一个数组
+
+                JSONObject object3 = object2.getJSONObject(0);
+                Log.d("JSON", "handleWeatherIDResponse:3 " + object3);
+                JSONObject object4 = object3.getJSONObject("basic");
+
+                String weatherID = object4.getString("id");
+                Log.d("City", "handleWeatherIDResponse: weatherId" + weatherID);
+
+
+               /* JSONObject jsonObject = new JSONObject(response);
+                JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+                String weatherContent = jsonArray.getJSONObject(0).toString();
+                return new Gson().fromJson(weatherContent, Weather.class);*/
+                return weatherID;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
     /**
      * 解析和处理服务器返回的省级数据
      * @param response

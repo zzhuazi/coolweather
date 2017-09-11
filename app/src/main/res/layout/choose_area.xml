@@ -28,6 +28,31 @@
             android:background="@drawable/ic_back"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/location_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/location_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/location_button"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/ic_location"/>
+    </RelativeLayout>
+
     <!--显示城市列表-->
     <ListView
         android:id="@+id/list_view"
